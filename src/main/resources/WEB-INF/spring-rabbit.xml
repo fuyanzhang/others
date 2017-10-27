@@ -21,6 +21,6 @@
     <rabbit:connection-factory id="rabbit-conn" addresses="${rabbit_host}" username="${rabbit_user}" password="${rabbit_passwd}" requested-heartbeat="10" />
 
     <rabbit:admin id="rabbitAdmin" connection-factory="rabbit-conn"/>
-    <rabbit:template></rabbit:template>
+    <rabbit:template id="rabbitTemplate" connection-factory="rabbit-conn" />
 
 </beans>
