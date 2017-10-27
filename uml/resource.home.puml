@@ -1,0 +1,12 @@
+@startuml
+title 首页资源位展示流程
+yoho.gateWay --> yoho.gateWay: findByCache()
+yoho.gateWay -->yohobuy.resources:ResourcesPrimaryController.home
+yoho.gateWay -->yohobuy.resources:ResourcesPersonalController.recommendFloors()
+yoho.gateWay --> yoho.gateWay: clearNeedIgnoreResources()
+yoho.gateWay --> yohobuy.order:YohoOrderController.isNewUser()
+yoho.gateWay --> yohobuy.order:ShoppingCartController.queryShoppingCartProductSkn()
+yoho.gateWay --> yohobuy.brower:brower.listBrowse
+yoho.gateWay -->yohobuy.brower:brower.getFavoriteList
+
+@enduml

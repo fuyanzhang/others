@@ -1,0 +1,26 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--加载rabbit配置文件-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:WEB-INF/rabbit_config.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <!--定义一个queue-->
+    <rabbit:queue id="test_queue_id" name="test_queue_name" auto-declare="true" auto-delete="false" durable="true" exclusive="false" />
+
+    <rabbit:connection-factory id="rabbit-conn" addresses="${rabbit_host}" username="${rabbit_user}" password="${rabbit_passwd}" requested-heartbeat="10" />
+
+    <rabbit:admin id="rabbitAdmin" connection-factory="rabbit-conn"/>
+    <rabbit:template></rabbit:template>
+
+</beans>
