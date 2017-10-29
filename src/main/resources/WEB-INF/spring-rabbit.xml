@@ -16,11 +16,30 @@
     </bean>
 
     <!--定义一个queue-->
-    <rabbit:queue id="test_queue_id" name="test_queue_name" auto-declare="true" auto-delete="false" durable="true" exclusive="false" />
+    <rabbit:queue id="test_queue" name="test_queue_name" auto-declare="true" auto-delete="false" durable="true" exclusive="false" />
 
-    <rabbit:connection-factory id="rabbit-conn" addresses="${rabbit_host}" username="${rabbit_user}" password="${rabbit_passwd}" requested-heartbeat="10" />
+    <rabbit:connection-factory id="rabbit-conn" addresses="127.0.0.1:15672" username="test" password="123456" requested-heartbeat="10" />
 
     <rabbit:admin id="rabbitAdmin" connection-factory="rabbit-conn"/>
     <rabbit:template id="rabbitTemplate" connection-factory="rabbit-conn" />
 
+    <rabbit:topic-exchange name="test_exchange" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <!-- 设置消息Queue匹配的pattern (direct模式为key) -->
+            <rabbit:binding queue="test_queue"  pattern=""/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <rabbit:listener-container connection-factory="rabbit-conn" acknowledge="auto">
+        <!--
+            queues 监听队列，多个用逗号分隔
+            ref 监听器 -->
+        <rabbit:listener queues="test_queue" ref="rabbitConsumer"/>
+    </rabbit:listener-container>
+
+    <bean id="rabbitConsumer" class="com.yoho.spring.rabbit.RabbitCosumer"></bean>
+    <bean id="producer" class="com.yoho.spring.rabbit.RabbitProducer">
+
+        <property name="amqpTemplate" ref="rabbitTemplate" />
+    </bean>
 </beans>
